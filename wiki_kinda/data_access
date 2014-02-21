@@ -1,0 +1,33 @@
+Data Access
+
+first and foremost needed for the project is a way to simulate the data from
+a 6DOF IMU.
+
+(see also 'Data Management')
+
+Exact data:
+The first idea here is to use a precalculated (thus exact) path, that the sensor could have expreienced. Parametrization may be quite simple for the first go. One importent feat of this kind of path should be to have the option for 'closed-loops', i.e. the start and end position are the same/continuous (as should the approximate first/second derivatives!), which could be achieved relatively easy when using symmetric figures, such as a ring, sine or moebius band
+
+Blurred data:
+As real data is usually verry blurred, such behaviour needs to be simulated. Therefor the aforementioned exact data should be blurred by e.g. a gauss-blurr, as well as maybe some salt-and-pepper noise (how ever thats achieved on a 1D-signal (per DOF)).
+
+Online versus Offline:
+To test how the rest of the project reacts to IMU-data, this simulated data needs to be able to be accessed exactly like the real IMU would, a 'mock IMU' so to say. To generate realistic offline data, the same processes can be used as when recording the real IMU data (which will be needed anyways!).
+
+
+Ideas for Implementation:
+
+ exact data:
+As the data is exact, instead of providing point-lists or something similar, a function could be provided to either incrementally 'move' the IMU through space, or to directly calculate the position of the IMU for any given time (which should be far more useful usually, as there will be no drift - besides just when the reaction to drift should be analized, of course!).
+Thus, the only data that needs to be provided for each of those exact tracks is the (concationation of) function(s) to calculate the exact movements.
+Still, the possibility to precalculate a dense point-list for such a function is important, to avoid long calculation times that may block/halt the rest of the system.
+
+ blurring:
+As with the exact data,one way to implement this easily is to blurr the signal just-in-time. Especially with the combination of parameters for the exact data generation, as well as for the bĺurring, there could be quite a lot of data-sets arising. Also, the exact data may be very densly sampled, but needs to be interpolated, thus pre-calculation of the blurred data is only possible when restricting to a specific sampling rate. Given that sampling rate is high enough (what is enough? 10kHz? 1000kHz?), that may still be feasible.
+
+
+Decisions for Implementation:
+
+have a 'imu-simulator', that is configurable with a 'path', where a 'path' is a set of time-dependant functions, together with the timestamps, where the path switches to the next function in time. (to be continued...)
+
+name: 'datamocker' (see according wiki page)

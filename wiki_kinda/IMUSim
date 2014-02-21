@@ -1,0 +1,13 @@
+IMUSim
+IMUSim is a simulation suite for inertial measurement sensors.
+
+accoridng paper:
+'IMUSim: A Simulation Environment for Inertial Sensing
+Algorithm Design and Evaluation'
+
+License:
+code released under GPL
+
+Interest:
+of particular interest is the implementation of trajectory simulation, as well as the visualization which uses both matplotlib as well as mayavi (thus vtk).
+If the suite itself is usable depends on the ability to generate/access life data, even though on could still save the IMUSime generated data and then reread them to feed a life system.

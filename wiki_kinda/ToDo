@@ -1,0 +1,33 @@
+ToDo
+
+ordered list (incomplete!)
+
+ - (done) setup git as 
+ - (done) setup bugs everywhere as distributed issue manager
+*** the following is about single 6DOf IMU sensor, other sensors/data
+     should work simultainously (care for concurrency, tho!!!) ***
+ - evaluate data-management solutions
+ - look more inut 'imusim' and see if that can be used or if there are
+   critical limitations
+ - generate appropriate data to simulate movements of a 6DOF imu as follows:
+    1 exact data for positions with high sampling rate
+    2 blurred (gauss?) version of the above, eventually as on-the-fly option
+   Note: generate at least some movements as a close-loop, to be able to run
+         them indefinitely
+ - elaborate means to access the offline data in a way that allows to switch to
+   real measurements easily
+    - access to data should be possible to either timing dependant (time goes
+      by even when not polling the data), or independant, for debugging
+   Note: this topic may be switched with data visualization (or at least a
+         primitive version thereoff)
+ - data visualization (hopefully using the aforementioned way of access)
+    - offline and online visualization!
+ - ...
+
+
+unordere list (incomplete!)
+
+ - a nice addon would be to have the possibility to have an interactive visualization of
+   the current IMU position which allows to move the imu virtually through mouse/keybord (or other) input. This could be useful to have a more immersive way to test the effects of imu input
+ - use github to push the git repo to
+ - use gitit as git-based wiki (and migrate this file!)
