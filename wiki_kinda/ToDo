@@ -27,6 +27,8 @@ ordered list (incomplete!)
 
 unordere list (incomplete!)
 
+ - create an icon!
+    - svg as template, to derive icon from?
  - a nice addon would be to have the possibility to have an interactive visualization of
    the current IMU position which allows to move the imu virtually through mouse/keybord (or other) input. This could be useful to have a more immersive way to test the effects of imu input
  - use github to push the git repo to
