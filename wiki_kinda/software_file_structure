@@ -26,6 +26,7 @@ d software
         - f __init__.py
         - f* *.py # optional 1-file modules, who don't need a sub-directory
         - d* modules/packages # sub-directory within the package structure
+  - d arduino # for arduino program(s)
 
 Post-Build:
  -- dunno right now --
