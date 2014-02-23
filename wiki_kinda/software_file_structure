@@ -15,10 +15,12 @@ file-tree idea:
 
 d airboard
   - d src # source for c++ (both .cpp and .h)
-     - d shared # folder for all shared sources, e.g. algorithms and stuff
-        - d* modules # folder for module components
-     - d apps # forder for all applications, e.g. visualization,config-tools
-        - d* app-folder # most probably one folder for each app
+     - d shared # directory for all shared sources, e.g. algorithms and stuff
+        - d* modules # directory for module components
+     - d tools # forder for all applications, e.g. visualization,config-tools
+        - d* tool-directory # most probably one directory for each tool
+     - d drivers # directory for everithing that is classified a driver
+        - d* driver-directory
   - d py # python files
      - d scripts # contains all scripts, e.g. for running a simulation
      - d tests # well, for tests ...
