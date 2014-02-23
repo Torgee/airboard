@@ -13,7 +13,7 @@ Pre Build:
 file-tree idea:
 (d: directory, f: file, []*: multiple entities)
 
-d software
+d airboard
   - d src # source for c++ (both .cpp and .h)
      - d shared # folder for all shared sources, e.g. algorithms and stuff
         - d* modules # folder for module components
