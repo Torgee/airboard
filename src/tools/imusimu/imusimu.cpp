@@ -1,5 +1,5 @@
 
-#include "IMUSimulator.h"
+#include "simulation/IMUSimulator.h"
 
 
 int main(int argc, char** argv)
@@ -17,3 +17,4 @@ int main(int argc, char** argv)
 	imusim.stop();
 	
 	return 0;
+}
