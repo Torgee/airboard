@@ -5,7 +5,6 @@
 
 #include <atomic>
 #include <chrono>
-#include <iostream>
 #include <random>
 #include <thread>
 
@@ -31,12 +30,12 @@ public:
 	void start();
 	
 private:
-	std::atomic<double> value;
-	msecs polling_interval;
+	std::atomic<double> m_value;
+	msecs m_pollingInterval;
 	
-	std::thread poll_thread;
+	std::thread m_pollThread;
 	// stop the thread As Soon As Possible
-	std::atomic<bool> stopASAP;
+	std::atomic<bool> m_stopASAP;
 		
 	void stop();
 	
