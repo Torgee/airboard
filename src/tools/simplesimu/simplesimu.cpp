@@ -4,7 +4,7 @@
 #include <string>
 #include <thread>
 
-1
+
 #include "RawDoubleSensorModule.h"
 
 
