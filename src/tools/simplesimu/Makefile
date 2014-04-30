@@ -7,11 +7,11 @@ INCLUDES = -I/usr/local/ -I.
 
 LIBS = -lzmq -lpthread
 
-SRCS = simplesimu.cpp RawDoubleSensorModule.cpp
+SRCS = simple_sensor.cpp RawDoubleSensorModule.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-EXECUTABLE = simplesimu
+EXECUTABLE = simple_sensor
 
 all: $(SRCS) $(EXECUTABLE) 
 
