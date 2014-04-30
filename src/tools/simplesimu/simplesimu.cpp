@@ -29,17 +29,19 @@ int main(int argc, char** argv)
 			//= RawDoubleSensorModule::DEFAULT_INTERVAL;
 			//= 500;
 	
+	
 	RawDoubleSensorModule sensorModule(value,interval);
 	//sensorModule.start();
 	
 	
-	// show that main thread is still alive
-    std::chrono::seconds duration(1);
+	// removed
+	//// show that main thread is still alive
+    //std::chrono::seconds duration(1);
 	//while(true){
-	for(int i=0;i<20;++i){
-		std::cout << "--- main thread alive!" << std::endl;
-		std::this_thread::sleep_for( duration );
-	}
+	//for(int i=0;i<20;++i){
+		//std::cout << "--- main thread alive!" << std::endl;
+		//std::this_thread::sleep_for( duration );
+	//}
 	
 	return 0;
 }
