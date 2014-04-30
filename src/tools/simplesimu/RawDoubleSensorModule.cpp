@@ -59,7 +59,7 @@ void RawDoubleSensorModule::stop()
 }
 
 
-// Note: 'stopASAP' is atomic<bool>!
+// Note: 'm_stopASAP' is atomic<bool>!
 void RawDoubleSensorModule::run()
 {
 	auto &pint = this->m_pollingInterval;

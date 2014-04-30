@@ -27,7 +27,6 @@ public:
 	void setValue(double value);
 	//void setPollingInverval(dur duration);
 	
-	void start();
 	
 private:
 	std::atomic<double> m_value;
@@ -36,7 +35,8 @@ private:
 	std::thread m_pollThread;
 	// stop the thread As Soon As Possible
 	std::atomic<bool> m_stopASAP;
-		
+	
+	void start();
 	void stop();
 	
 	void run();
