@@ -7,9 +7,14 @@
 
 #include "RawDoubleSensorModule.h"
 
+#include "zmq.hpp"
+
 
 int main(int argc, char** argv)
 {
+	// initialize zeromq context
+	zmq::context_t context (1);
+	
 	// *** parameter setup ***
 	// first use a constant value, random will be added later
 	// (together with command line arguments!)

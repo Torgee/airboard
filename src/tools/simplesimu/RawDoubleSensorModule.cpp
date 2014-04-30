@@ -91,6 +91,7 @@ void RawDoubleSensorModule::run()
 
 void RawDoubleSensorModule::publish(double) const
 {
+	static_assert(false,"needs to be changed to using zeromq!");
 	//std::cout << "tid: " threadID << " - value: "
 	//		<< getValue() << std::endl;
 	std::cout << "sensor-value: " << getValue() << std::endl;

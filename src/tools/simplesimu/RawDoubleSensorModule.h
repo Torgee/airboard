@@ -8,6 +8,8 @@
 #include <random>
 #include <thread>
 
+#include "zmq.hpp"
+
 
 using msecs = std::chrono::milliseconds;
 
@@ -40,6 +42,8 @@ private:
 	void stop();
 	
 	void run();
+	// probalby, constness needs to be removed when using e.g. zeromq,
+	// as the zmq publishing class will probalbly not work as const
 	void publish(double) const;
 	
 	double getValue() const;
