@@ -3,7 +3,7 @@ DEBUG = -g
 CFLAGS = -g -Wall -std=c++11
 LFLAGS = -L/usr/local/lib/
 
-INCLUDES = -I/usr/local/ -I.
+INCLUDES = -I/usr/local/include -I.
 
 LIBS = -lzmq -lpthread
 
