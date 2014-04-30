@@ -1,38 +1,25 @@
-IDIR =.
-CC=g++
-CFLAGS=-std=c++11 -Wall -I$(IDIR)
+CC = g++
+DEBUG = -g
+CFLAGS = -g -Wall -std=c++11
+LFLAGS = -L/usr/local/lib/
 
-ODIR=obj
-LDIR =../lib
+INCLUDES = -I/usr/local/ -I.
 
-LIBS=-lphtread
+LIBS = -lzmq -lpthread
 
+SRCS = simplesimu.cpp RawDoubleSensorModule.cpp
 
-simplesimu: simplesimu.o RawDoubleSensorModule.o
-	$(CC) -o $@ $^
+OBJS = $(SRCS:.cpp=.o)
 
-simplesimu.o: RawDoubleSensorModule.h
-	$(CC) -c simplesimu.cpp $(CFLAGS) $(LIBS)
+EXECUTABLE = simplesimu
 
-RawDoubleSensorModule.o: RawDoubleSensorModule.h RawDoubleSensorModule.cpp
-	$(CC) -c RawDoubleSensorModule.cpp $(CFLAGS) $(LIBS)
+all: $(SRCS) $(EXECUTABLE) 
 
-#_DEPS = RawDoubleSensorModule.h
-#DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
-#
-#_OBJ = RawDoubleSensorModule.o simplesimu.o 
-#OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
-#
-#
-#$(ODIR)/%.o: %.c $(DEPS)
-	#$(CC) -c -o $@ $< $(CFLAGS)
-#$(ODIR)/RawDoubleSensorModule.o: RawDoubleSensorModule.c $(DEPS)
-	#$(CC) -c -o $@ $< $(CFLAGS)
-#
-#simplesimu: $(OBJ)
-	#$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+$(EXECUTABLE): $(OBJS)
+	$(CC) $(OBJS) -o $(EXECUTABLE) $(LFLAGS) $(LIBS)
 
-.PHONY: clean
+.cpp.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	$(RM) *.o *~ $(EXECUTABLE)
