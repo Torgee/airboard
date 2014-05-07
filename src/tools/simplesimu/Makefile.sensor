@@ -22,4 +22,5 @@ $(EXECUTABLE): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	$(RM) *.o *~ $(EXECUTABLE)
+	$(RM) *.o *~
+#	$(RM) *.o *~ $(EXECUTABLE)
