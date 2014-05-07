@@ -129,29 +129,14 @@ void RawDoubleSensorModule::publish(double)
 	// double* to the same address as m_message.data, to avoid repeated
 	// casts, even though the compiler might optimize that anyway
 	// Serious! Note: don't forget to switch to protobuf or similar!!!
-	//zmq::message_t message(sizeof(double)+1);
-	//*(static_cast<double*>(message.data())) = getValue();
+	zmq::message_t message(sizeof(double));
+	*(static_cast<double*>(message.data())) = getValue();
 	
-	//strcpy((char*)(m_message.data()),"abcd");
-	//
-	//std::cout << "sending sensor-value: "
-			//<< *(static_cast<double*>(m_message.data()))
-			//<< std::endl;
-	//std::cout << "as string: "
-			//<< std::string(static_cast<char*>(m_message.data()))
-			//<< std::endl;
+	std::cout << "sending sensor-value: "
+			<< *(static_cast<double*>(message.data()))
+			<< std::endl;
 			
-	zmq::message_t message(6+1);
-	snprintf ((char *) message.data(), 6+1 ,
-        	"%6f",getValue());
-    std::cout << "sending: " << (char*)message.data() << std::endl;
 	m_pub_socket.send(message);
-	
-	//m_pub_socket.send(m_message);
-	
-	
-	//std::cout << "tid: " threadID << " - value: "
-	//		<< getValue() << std::endl;
 }
 
 
