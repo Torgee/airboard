@@ -7,11 +7,11 @@ INCLUDES = -I/usr/local/include -I.
 
 LIBS = -lzmq -lpthread
 
-SRCS = simple_reciever.cpp RawDoubleReciever.cpp
+SRCS = simple_receiver.cpp RawDoubleReceiver.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-EXECUTABLE = simple_reciever
+EXECUTABLE = simple_receiver
 
 all: $(SRCS) $(EXECUTABLE) 
 

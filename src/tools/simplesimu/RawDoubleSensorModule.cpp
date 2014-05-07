@@ -3,14 +3,29 @@
 #include "RawDoubleSensorModule.h"
 
 #include <iostream>
+#include <string>
 
-RawDoubleSensorModule::RawDoubleSensorModule
-		(double value, msecs pollingInterval)
-		 : m_value(value), m_pollingInterval(pollingInterval)
+RawDoubleSensorModule::RawDoubleSensorModule(
+		double value,
+		msecs pollingInterval,
+		zmq::context_t &context)
+		 : 
+		m_value(value),
+		m_pollingInterval(pollingInterval),
+		m_pub_socket(context, ZMQ_PUB),
+		// give message-'buffer' the desired fixed size
+		m_message(sizeof(double)+1)
 		// no need to set this here, will only be used after
 		// initialization in 'start()'
 		//stopASAP(false)
 {
+	// bind to ipc channel
+	// ToDo: get the channel per parameter, or preferably, get the
+	// whole publishing functionality in a dedicated class
+	m_pub_socket.bind("tcp://*:5556");
+	//m_pub_socket.connect("tcp://*:5556");
+    m_pub_socket.bind("ipc://sensor.ipc");
+    
 	
 	// problematic, as 'this' pointer passed to thread constructor
 	// is still incomplete at this point
@@ -71,30 +86,72 @@ void RawDoubleSensorModule::run()
 	//std::chrono::time_point<std::chrono::system_clock>
 			//last, now;
 			
-	auto last = std::chrono::system_clock::now();
-	decltype(last) now;
+	// didn't work like this ... just compensate for the time
+	// it took to actually publish
+	//auto last = std::chrono::system_clock::now();
+	//decltype(last) now;
 	
+	//decltype(pint - (now - last)) duration;
+	
+	decltype(std::chrono::system_clock::now()) pre, post;	
 	
 	//last = std::chrono::system_clock::now();
-	decltype(pint - (now - last)) duration;
+	decltype(pint - (pre - post)) duration;
 	
 	while(!m_stopASAP){
-		publish(getValue());
 		
-		now = std::chrono::system_clock::now();
-		duration = pint - (now - last);
+		pre = std::chrono::system_clock::now();
+		publish(getValue());
+		post = std::chrono::system_clock::now();
+		
+		duration = pint - (pre - post);
+		
+		//now = std::chrono::system_clock::now();
+		//duration = pint - (now - last);
 		std::this_thread::sleep_for(duration);
-		last = now;
+		std::cout << "time slept: "
+				<< std::chrono::duration_cast<msecs>(duration).count()
+				<< "msecs" << std::endl;
+		
+		//last = now;
 	}
 }
 
 
-void RawDoubleSensorModule::publish(double) const
+void RawDoubleSensorModule::publish(double)
 {
-	static_assert(false,"needs to be changed to using zeromq!");
+	//static_assert(false,"needs to be changed to using zeromq!");
+	
+	// grab the value and put it on the message
+	// Note: seems like a new message-obejct needs to be created for
+	//       every send
+	// Note: (obsolete by previous note!) possibly one could create a
+	// double* to the same address as m_message.data, to avoid repeated
+	// casts, even though the compiler might optimize that anyway
+	// Serious! Note: don't forget to switch to protobuf or similar!!!
+	//zmq::message_t message(sizeof(double)+1);
+	//*(static_cast<double*>(message.data())) = getValue();
+	
+	//strcpy((char*)(m_message.data()),"abcd");
+	//
+	//std::cout << "sending sensor-value: "
+			//<< *(static_cast<double*>(m_message.data()))
+			//<< std::endl;
+	//std::cout << "as string: "
+			//<< std::string(static_cast<char*>(m_message.data()))
+			//<< std::endl;
+			
+	zmq::message_t message(6+1);
+	snprintf ((char *) message.data(), 6+1 ,
+        	"%6f",getValue());
+    std::cout << "sending: " << (char*)message.data() << std::endl;
+	m_pub_socket.send(message);
+	
+	//m_pub_socket.send(m_message);
+	
+	
 	//std::cout << "tid: " threadID << " - value: "
 	//		<< getValue() << std::endl;
-	std::cout << "sensor-value: " << getValue() << std::endl;
 }
 
 

@@ -20,7 +20,8 @@ class RawDoubleActiveSensor {
 class RawDoubleSensorModule {
 
 public:
-	RawDoubleSensorModule(double value, msecs polling_interval);
+	RawDoubleSensorModule(double value, msecs polling_interval,
+			zmq::context_t &context);
 	virtual ~RawDoubleSensorModule();
 	
 	static constexpr double DEFAULT_VALUE = 0.0;
@@ -38,13 +39,18 @@ private:
 	// stop the thread As Soon As Possible
 	std::atomic<bool> m_stopASAP;
 	
+	// will be initialized and bound in c'tor
+	zmq::socket_t m_pub_socket;
+	// will be given the static size required for an double in c'tor
+	zmq::message_t m_message;
+	
 	void start();
 	void stop();
 	
 	void run();
 	// probalby, constness needs to be removed when using e.g. zeromq,
 	// as the zmq publishing class will probalbly not work as const
-	void publish(double) const;
+	void publish(double);
 	
 	double getValue() const;
 
