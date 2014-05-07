@@ -41,8 +41,6 @@ private:
 	
 	// will be initialized and bound in c'tor
 	zmq::socket_t m_pub_socket;
-	// will be given the static size required for an double in c'tor
-	zmq::message_t m_message;
 	
 	void start();
 	void stop();

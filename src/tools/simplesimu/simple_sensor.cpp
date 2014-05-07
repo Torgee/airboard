@@ -31,7 +31,9 @@ int main(int argc, char** argv)
 	// to use a publisher/notifier!
 	//Publisher pub;
 	//SensorModule sensmod(pub);
-	std::chrono::milliseconds interval(1000);
+	
+	std::chrono::milliseconds interval(argc > 1 ?
+			atoi(argv[1]) : 100);
 	//std::chrono::milliseconds interval(500);
 			//= RawDoubleSensorModule::DEFAULT_INTERVAL;
 			//= 500;

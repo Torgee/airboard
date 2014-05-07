@@ -12,9 +12,7 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 		 : 
 		m_value(value),
 		m_pollingInterval(pollingInterval),
-		m_pub_socket(context, ZMQ_PUB),
-		// give message-'buffer' the desired fixed size
-		m_message(sizeof(double)+1)
+		m_pub_socket(context, ZMQ_PUB)
 		// no need to set this here, will only be used after
 		// initialization in 'start()'
 		//stopASAP(false)
@@ -109,9 +107,9 @@ void RawDoubleSensorModule::run()
 		//now = std::chrono::system_clock::now();
 		//duration = pint - (now - last);
 		std::this_thread::sleep_for(duration);
-		std::cout << "time slept: "
-				<< std::chrono::duration_cast<msecs>(duration).count()
-				<< "msecs" << std::endl;
+		//std::cout << "time slept: "
+				//<< std::chrono::duration_cast<msecs>(duration).count()
+				//<< "msecs" << std::endl;
 		
 		//last = now;
 	}
@@ -131,10 +129,10 @@ void RawDoubleSensorModule::publish(double)
 	// Serious! Note: don't forget to switch to protobuf or similar!!!
 	zmq::message_t message(sizeof(double));
 	*(static_cast<double*>(message.data())) = getValue();
-	
-	std::cout << "sending sensor-value: "
-			<< *(static_cast<double*>(message.data()))
-			<< std::endl;
+	//
+	//std::cout << "sending sensor-value: "
+			//<< *(static_cast<double*>(message.data()))
+			//<< std::endl;
 			
 	m_pub_socket.send(message);
 }
