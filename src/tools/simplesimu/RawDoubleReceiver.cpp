@@ -10,12 +10,12 @@ RawDoubleReceiver::RawDoubleReceiver(zmq::context_t &context)
 {
 	
 	//m_sub_socket.connect("tcp://localhost:5556");
-	m_sub_socket.connect("ipc://sensor.ipc");
+	m_sub_socket.connect("ipc:///tmp/sensor.ipc");
 	m_sub_socket.setsockopt(ZMQ_SUBSCRIBE,"",strlen(""));
 	//m_sub_socket.setsockopt(ZMQ_SUBSCRIBE,"2",strlen("2"));
 	//m_sub_socket.setsockopt(ZMQ_SUBSCRIBE,"",1);
 	
-	std::cout << "strlen(\"\"): " << strlen("") << std::endl;
+	//std::cout << "strlen(\"\"): " << strlen("") << std::endl;
 }
 
 

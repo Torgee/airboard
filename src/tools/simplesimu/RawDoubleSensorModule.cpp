@@ -22,7 +22,7 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 	// whole publishing functionality in a dedicated class
 	m_pub_socket.bind("tcp://*:5556");
 	//m_pub_socket.connect("tcp://*:5556");
-    m_pub_socket.bind("ipc://sensor.ipc");
+    m_pub_socket.bind("ipc:///tmp/sensor.ipc");
     
 	
 	// problematic, as 'this' pointer passed to thread constructor
