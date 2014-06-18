@@ -43,30 +43,21 @@ int main(int argc, char** argv)
 	//sensorModule.start();
 	
 	
-	// removed
-	//// show that main thread is still alive
-    //std::chrono::seconds duration(1);
-	//while(true){
-	//for(int i=0;i<20;++i){
-		//std::cout << "--- main thread alive!" << std::endl;
-		//std::this_thread::sleep_for( duration );
-	//}
+	bool goOn = true;
+	std::string line;
+	decltype(value) newValue;
 	
-	// ToDo: try to cope for ctrl-c, as the ipc-pipe will not be
-	// destroyed otherwise
-	// Note: the following does NOT work!
-	try{
-		std::cin.get();
-		//std::this_thread::sleep_for(std::chrono::seconds(60));
-		//std::chrono::seconds duration(1);
-		//while(true){
-		//for(int i=0;i<20;++i){
-			//std::cout << "--- main thread alive!" << std::endl;
-			//std::this_thread::sleep_for( duration );
-		//}
-	} catch(...){ //seems not to work for ctrl-c ...
-		std::cout << "exception catched!" << std::endl;
+	while(goOn){
+		std::getline(std::cin,line);
+		
+		try {
+			newValue = std::stod(line);
+			sensorModule.setValue(newValue);
+		} catch (...) {
+			goOn = false;
+		}
 	}
+
 	
 	return 0;
 }
