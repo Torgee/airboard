@@ -2,6 +2,8 @@
 
 #include "RawDoubleReceiver.h"
 
+#include "double.prot.pb.h"
+
 #include <iostream>
 #include <string>
 
@@ -29,15 +31,23 @@ double RawDoubleReceiver::receive()
 {
 	zmq::message_t message;
 	m_sub_socket.recv(&message);
-	//
-	//std::cout << "received something! - len:"
-			//<< message.size() << std::endl;
-	//std::cout << "message: '"
-			//<< std::string(static_cast<char*>(message.data()))
-			//<< "'" << std::endl;
+	RawDouble rawDouble;
+	
+	std::string buffer(static_cast<char*>(message.data()));
+	std::cout << "received something! - len:"
+			<< message.size() << std::endl;
+	std::cout << "message: '"
+			<< buffer
+			<< "'" << std::endl;
 	//std::cout << "as double: "
 			//<< *(static_cast<double*>(message.data()))
 			//<< std::endl;
+	rawDouble.ParseFromArray(message.data(),message.size());
+	std::cout << "from RawDouble: "
+			<< rawDouble.value()
+			<< std::endl;
+	
 
-	return *static_cast<double*>(message.data());
+	return rawDouble.value();
+	//return *static_cast<double*>(message.data());
 }
