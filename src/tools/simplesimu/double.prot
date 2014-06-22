@@ -1,0 +1,5 @@
+
+message RawDouble {
+	required uint64 timestamp = 1;
+	required double value = 2;
+}
