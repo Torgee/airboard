@@ -21,6 +21,9 @@ int main(int argc, char** argv){
 	// allocate those variables before measuring anything
 	decltype(std::chrono::system_clock::now()) start_time,end_time;
 	
+	// warmup
+	receiver.receive();
+	
 	start_time = std::chrono::system_clock::now();
 	for(i=0;i<nbrOfIters;++i){
 	//while(true){
