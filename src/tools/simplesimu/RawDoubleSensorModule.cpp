@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <chrono>
 
 RawDoubleSensorModule::RawDoubleSensorModule(
 		double value,
@@ -17,6 +19,10 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 		// initialization in 'start()'
 		//stopASAP(false)
 {
+	
+	// try High Water Mark
+	m_pub_socket.setsockopt(ZMQ_SNDHWM,1)
+	
 	// bind to ipc channel
 	// ToDo: get the channel per parameter, or preferably, get the
 	// whole publishing functionality in a dedicated class
@@ -116,7 +122,7 @@ void RawDoubleSensorModule::run()
 }
 
 
-void RawDoubleSensorModule::publish(double)
+void RawDoubleSensorModule::publish(double value)
 {
 	//static_assert(false,"needs to be changed to using zeromq!");
 	
@@ -127,9 +133,44 @@ void RawDoubleSensorModule::publish(double)
 	// double* to the same address as m_message.data, to avoid repeated
 	// casts, even though the compiler might optimize that anyway
 	// Serious! Note: don't forget to switch to protobuf or similar!!!
-	zmq::message_t message(sizeof(double));
-	*(static_cast<double*>(message.data())) = getValue();
-	//
+	
+	
+    auto now = std::chrono::system_clock::now().time_since_epoch();
+    auto ms_epoch = std::chrono::duration_cast<msecs>(now).count();
+    
+    m_rawDouble.set_timestamp(ms_epoch);
+	//double value = getValue();
+	m_rawDouble.set_value(value);
+	
+	//zmq::message_t message(sizeof(double));
+	//*(static_cast<double*>(message.data())) = getValue();
+	auto buffer_size = m_rawDouble.ByteSize();
+	zmq::message_t message(buffer_size);
+	
+	m_rawDouble.SerializeToArray(message.data(),buffer_size);
+	
+	RawDouble dub;
+	//dub.ParseFromString(buffer);
+	dub.ParseFromArray(message.data(),buffer_size);
+	
+#ifdef VERBOSE
+	std::cout << "****" << std::endl;
+	//auto now = std::chrono::system_clock::now();
+	//auto the_time = std::chrono::system_clock::to_time_t(now);
+	//std::cout << "ts: " << std::ctime(std::localtime(&the_time),"%T");
+	//std::cout << "ts: " << std::ctime(&the_time) << std::endl;
+    auto now = std::chrono::system_clock::now().time_since_epoch();
+    auto ms_epoch = std::chrono::duration_cast<msecs>(now).count();
+	std::cout << "ts: " << ms_epoch << std::endl;
+	std::cout << "value: " << value << std::endl;
+	std::cout << "RawDouble: " << m_rawDouble.value() << std::endl;
+	std::cout << "re-parsed: " << dub.value() << std::endl;
+	std::cout << "buff_len: " << buffer_size << std::endl;
+	std::cout << "message: '"
+			<< std::string(static_cast<char*>(message.data()))
+			<< "'" << std::endl;
+#endif // #ifdef VERBOSE
+	
 	//std::cout << "sending sensor-value: "
 			//<< *(static_cast<double*>(message.data()))
 			//<< std::endl;

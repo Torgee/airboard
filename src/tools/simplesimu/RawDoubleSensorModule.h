@@ -3,6 +3,8 @@
 #define RAWDOUBLESENSORMODULE_H
 
 
+#include "double.prot.pb.h"
+
 #include <atomic>
 #include <chrono>
 #include <random>
@@ -42,13 +44,17 @@ private:
 	// will be initialized and bound in c'tor
 	zmq::socket_t m_pub_socket;
 	
+	// protobuf message, 'm_value' will be assigned and then serialised
+	// on every call to 'publish(...)'
+	RawDouble m_rawDouble;
+	
 	void start();
 	void stop();
 	
 	void run();
 	// probalby, constness needs to be removed when using e.g. zeromq,
 	// as the zmq publishing class will probalbly not work as const
-	void publish(double);
+	void publish(double value);
 	
 	double getValue() const;
 
