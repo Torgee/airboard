@@ -38,7 +38,7 @@ class ZMQReceiver():
 		
 		# seems not to work :/
 		## set High-Water-Mark to 1, so basically disabling the message
-		## queue, 'cause it'ss likely that the GUI will not keep up with
+		## queue, 'cause it's likely that the GUI will not keep up with
 		## the stream
 		## Note: possible solution is to put the receiver in a dedicated
 		##       thread/process, which is planned for the future!
@@ -67,8 +67,6 @@ class ZMQReceiver():
 			except zmq.ZMQError:
 				break
 			else:
-				#print 'got something'
-				#print self.parser(temp)
 				msg = temp
 		
 		return self.parser(msg)
@@ -86,8 +84,11 @@ class ReceiverLabel(Label):
 	def recv(self,dt=0):
 		self.text = str(self.receiver.recv())
 		
-	# discards all previous messages that are in a buffer eventually
 	def try_recv_latest(self,dt=0):
+		"""
+		discards all previous messages that are in a buffer potentially
+		does nothing if buffer is empty (no message to be received)
+		"""
 		try:
 			self.text = str(self.receiver.try_recv_latest())
 		except BufferError:
@@ -95,7 +96,6 @@ class ReceiverLabel(Label):
 			
 
 if __name__ == '__main__':
-	#assert False,'not ready!'
 	
 	# use the string-parsing function generated from protoc
 	recv = ZMQReceiver(double_pb2.RawDouble.FromString)
