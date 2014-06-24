@@ -2,6 +2,8 @@
 
 import sys
 
+from collections import deque
+
 import double_pb2
 
 import zmq
@@ -23,7 +25,13 @@ class MyApp(App):
 		self.receiver = receiver
 		
 	def build(self,**kwargs):
-		return ReceiverLabel(self.receiver,text='n.a.')
+		bufflen = 5
+		self.recv_label = ReceiverLabel(
+				self.receiver,bufflen,text='n.a.')
+		#Clock.schedule_interval(self.recv,0)
+		# update only every 0.05s at max, to limit cpu use
+		Clock.schedule_interval(self.recv_label.display_latest,0.1)
+		return self.recv_label
 
 class ZMQReceiver():
 	def __init__(self,parser):
@@ -70,16 +78,24 @@ class ZMQReceiver():
 				msg = temp
 		
 		return self.parser(msg)
+		
+	def recv_all(self,maxlen=None):
+		msg_list = deque(maxlen=maxlen)
+		while(True):
+			try:
+				msg_list.append(self.socket.recv(flags = zmq.NOBLOCK))
+			except zmq.ZMQError:
+				break
+		
+		return [ self.parser(msg) for msg in msg_list ]
 
 
 
 class ReceiverLabel(Label):
-	def __init__(self,receiver,**kwargs):
+	def __init__(self,receiver,bufflen,**kwargs):
 		super(ReceiverLabel,self).__init__(**kwargs)
 		self.receiver = receiver
-		#Clock.schedule_interval(self.recv,0)
-		# update only every 0.05s at max, to limit cpu use
-		Clock.schedule_interval(self.try_recv_latest,0.1)
+		self.deque = deque(maxlen=bufflen)
 		
 	def recv(self,dt=0):
 		self.text = str(self.receiver.recv())
@@ -93,6 +109,24 @@ class ReceiverLabel(Label):
 			self.text = str(self.receiver.try_recv_latest())
 		except BufferError:
 			pass
+			
+	def display_latest(self,dt=0):
+		msg_list = self.recv_all(maxlen=self.deque.maxlen)
+		
+		if len(msg_list) == 0:
+			return
+		
+		for msg in msg_list:
+			self.deque.append(msg)
+		
+		string_list = [ str(elem) for elem in self.deque ]
+		text = ''.join(string_list)			
+		
+		self.text = text
+
+
+	def recv_all(self,maxlen=None):
+		return self.receiver.recv_all(maxlen)
 			
 
 if __name__ == '__main__':
