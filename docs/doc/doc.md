@@ -6,9 +6,10 @@
 At the moment, there is only one working module in this project, namely 'simplesimu'. This module is merely proof of concept and consists of a simple server 'simple_sensor', that simulates streaming sensor data in form of a dobule value and a corresponding timestamp via a zmq-socket (or rather multiple, as tcp and ipc are available currently), using googles protobuf for encoding. And multiple varieties of receivers 'simple_receiver', 'receiver.py' and 'receiver_kivy.py', that receive the stream and either measure throughput,display the values, or both.
 
 ### Building
-.
-.
-.
+
+For the c++ programs (simple_sensor and simple_receiver), build the corresponding Makefiles (Makefile.sensor and Makefile.receiver respectively) using make. There is also a 'clear' target in both.
+There is also a 'master' makefile, simply called 'Makefile', that will build both programs.
+For the python programs, just run the scripts with python.
 
 ### DataFlow
 
