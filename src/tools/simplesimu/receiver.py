@@ -2,6 +2,7 @@
 
 import sys
 import timeit
+import tempfile
 
 import zmq
 
@@ -14,7 +15,10 @@ context = zmq.Context()
 socket = context.socket(zmq.SUB)
 
 print("Collecting updates from sensor")
-socket.connect("ipc:///tmp/sensor.ipc")
+tempdir = tempfile.gettempdir()
+ipcport = "ipc://{}/sensor.ipc".format(tempdir)
+socket.connect(ipcport)
+print("Listening to {}-port: {}".format('ipc',ipcport))
 
 # Subscribe to all messages
 socket.setsockopt_string(zmq.SUBSCRIBE, u"")
