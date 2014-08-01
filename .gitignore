@@ -1,5 +1,6 @@
 src/tools/imusimu/imusimu.o
 src/tools/simplesimu/RawDoubleReceiver.o
+src/tools/simplesimu/RawDoubleSensorModule.o
 src/tools/simplesimu/double.prot.pb.cc
 src/tools/simplesimu/double.prot.pb.h
 src/tools/simplesimu/double/
