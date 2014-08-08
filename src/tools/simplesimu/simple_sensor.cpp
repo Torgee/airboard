@@ -46,7 +46,9 @@ int main(int argc, char** argv)
 	bool goOn = true;
 	std::string line;
 	decltype(value) newValue;
-	
+
+	// Note: This is no busy wait! Rather a very basic and limited interpreter,
+	//       while processing (i.e. sending data) is running in a seperate thread
 	while(goOn){
 		std::getline(std::cin,line);
 		
