@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 #include <chrono>
+#include <cstdlib>
+
 
 RawDoubleSensorModule::RawDoubleSensorModule(
 		double value,
@@ -21,15 +23,36 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 {
 	
 	// try High Water Mark
-	m_pub_socket.setsockopt(ZMQ_SNDHWM,1)
+	//m_pub_socket.setsockopt(ZMQ_SNDHWM,1);
 	
 	// bind to ipc channel
 	// ToDo: get the channel per parameter, or preferably, get the
 	// whole publishing functionality in a dedicated class
 	m_pub_socket.bind("tcp://*:5556");
 	//m_pub_socket.connect("tcp://*:5556");
-    m_pub_socket.bind("ipc:///tmp/sensor.ipc");
-    
+	
+	std::string tmpdir_str;
+	char *tmpdir_cptr = NULL;
+	const char *tmpdir_names[] = {"TMP","TEMP","TMPDIR"};
+	for(auto &name : tmpdir_names){
+		tmpdir_cptr = std::getenv(name);
+		if(tmpdir_cptr != NULL){
+			break;
+		}
+	}
+	if(tmpdir_cptr != NULL){
+		std::cout << "Found TMPDIR: '" << tmpdir_cptr << "'" << std::endl;
+		tmpdir_str = tmpdir_cptr;
+	} else {	
+		std::cout << "No TMPDIR found! Defaulting to '/tmp'" << std::endl;
+		tmpdir_str = "/tmp";
+	}
+	std::stringstream ipc_address("");
+	ipc_address << "ipc://" << tmpdir_str << "/sensor.ipc";
+	std::cout << "Using '" << ipc_address.str() << "' for IPC" << std::endl;
+	m_pub_socket.bind(ipc_address.str().c_str());
+	//m_pub_socket.bind("ipc:///tmp/sensor.ipc");
+	
 	
 	// problematic, as 'this' pointer passed to thread constructor
 	// is still incomplete at this point
