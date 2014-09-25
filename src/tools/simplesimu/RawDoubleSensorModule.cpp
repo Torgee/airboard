@@ -40,6 +40,7 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 			break;
 		}
 	}
+	
 	if(tmpdir_cptr != NULL){
 		std::cout << "Found TMPDIR: '" << tmpdir_cptr << "'" << std::endl;
 		tmpdir_str = tmpdir_cptr;
@@ -47,6 +48,8 @@ RawDoubleSensorModule::RawDoubleSensorModule(
 		std::cout << "No TMPDIR found! Defaulting to '/tmp'" << std::endl;
 		tmpdir_str = "/tmp";
 	}
+	
+	
 	std::stringstream ipc_address("");
 	ipc_address << "ipc://" << tmpdir_str << "/sensor.ipc";
 	std::cout << "Using '" << ipc_address.str() << "' for IPC" << std::endl;
